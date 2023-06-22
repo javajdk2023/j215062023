@@ -6,6 +6,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.fuctura.entidade.Jogador;
 
 public class Aplicacao {
 
@@ -37,9 +41,30 @@ public class Aplicacao {
 		PreparedStatement pstmConsulta = conexao.prepareStatement(sqlConsulta);
 		ResultSet rs = pstmConsulta.executeQuery();
 		
-		while( rs.next() ) {
-			System.out.println("Tem linha");
-		}
-	}
+		//rs.next() -> true, cursor = 0
 
+		List<Jogador> jogadores = new ArrayList<>();
+		
+		while( rs.next() ) {
+			//cursor = 2
+			int codigo = rs.getInt(1);
+			String nome = rs.getString(2);
+			 //System.out.println("Row: " + rs.getRow());
+			Jogador j = new Jogador();
+			j.setCodigo(codigo);
+			j.setNome(nome);
+			
+			jogadores.add(j);
+		}
+		
+		for(Jogador ref : jogadores) {
+			System.out.println("Código: " + ref.getCodigo());
+			System.out.println("Nome: " + ref.getNome());
+		}
+		
+	}
+	
+	
+	//metodo q consulta os dados
+	
 }
