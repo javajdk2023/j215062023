@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Aplicacao {
@@ -16,7 +17,6 @@ public class Aplicacao {
 		
 		Connection conexao = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fuctura","fuctura", "123");
 	
-		conexao.setAutoCommit(false);
 		
 		//aspas simples -> varchar
 		String sql = "insert into jogador values ( ?, ? )";
@@ -33,11 +33,13 @@ public class Aplicacao {
 		pstm.execute();
 		
 		
-		conexao.commit();
-		conexao.rollback();
+		String sqlConsulta = " select * from jogador "; 
+		PreparedStatement pstmConsulta = conexao.prepareStatement(sqlConsulta);
+		ResultSet rs = pstmConsulta.executeQuery();
 		
-		
-		
+		while( rs.next() ) {
+			System.out.println("Tem linha");
+		}
 	}
 
 }
