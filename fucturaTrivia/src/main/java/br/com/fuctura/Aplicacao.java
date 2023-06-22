@@ -17,14 +17,15 @@ public class Aplicacao {
 		Connection conexao = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fuctura","fuctura", "123");
 	
 		//aspas simples -> varchar
-		String sql = "insert into jogador (nome) values ( ? )";
+		String sql = "insert into jogador values ( ?, ? )";
 												 //1 , 2	
 		
 		System.out.println("conectado com sucesso!");
 		
 		PreparedStatement pstm = conexao.prepareStatement(sql);//analogia 
 		
-		pstm.setString(1, "caca rato");
+		pstm.setString(2, "caca rato");
+		pstm.setInt(1, 2000);
 		
 		pstm.execute();
 		
