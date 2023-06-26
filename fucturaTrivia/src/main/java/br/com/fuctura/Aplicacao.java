@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.fuctura.dao.JogadorDAO;
 import br.com.fuctura.entidade.Jogador;
 
 public class Aplicacao {
@@ -17,45 +18,24 @@ public class Aplicacao {
 		
 		Driver driver = new org.postgresql.Driver();
 		DriverManager.registerDriver(driver);
-
-		
 		Connection conexao = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fuctura","fuctura", "123");
 	
+		JogadorDAO dao = new JogadorDAO();
 		
-		//aspas simples -> varchar
-		String sql = "insert into jogador values ( ?, ? )";
-												 //1 , 2	
-		
-		System.out.println("conectado com sucesso!");
-		
-		
-		PreparedStatement pstm = conexao.prepareStatement(sql);//analogia 
-		
-		pstm.setString(2, "Love");
-		pstm.setInt(1, 2000);
-		
-		pstm.execute();
-		
-		
-		String sqlConsulta = " select * from jogador "; 
-		PreparedStatement pstmConsulta = conexao.prepareStatement(sqlConsulta);
-		ResultSet rs = pstmConsulta.executeQuery();
-		
-		//rs.next() -> true, cursor = 0
+		Jogador j1 = new Jogador();
+		j1.setNome("pedro");
+		j1.setCodigo(52);
+		j1.setIdade(27);
 
-		List<Jogador> jogadores = new ArrayList<>();
+		Jogador j2 = new Jogador();
+		j2.setNome("joao");
+		j2.setCodigo(53);
+		j2.setIdade(74);
 		
-		while( rs.next() ) {
-			//cursor = 2
-			int codigo = rs.getInt(1);
-			String nome = rs.getString(2);
-			 //System.out.println("Row: " + rs.getRow());
-			Jogador j = new Jogador();
-			j.setCodigo(codigo);
-			j.setNome(nome);
-			
-			jogadores.add(j);
-		}
+		dao.inserir(conexao, j1);
+		dao.inserir(conexao, j2);		
+		
+		List<Jogador> jogadores = dao.consultarTodos(conexao);	
 		
 		for(Jogador ref : jogadores) {
 			System.out.println("Código: " + ref.getCodigo());
