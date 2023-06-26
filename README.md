@@ -1,32 +1,44 @@
 # j215062023
-Repositório da turma de Java 2
 
-# Configurar versão do Java
 
-## alterar o arquivo POM.xml
+# DDL do projeto
 
-```xml
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  
-  <groupId>br.com.fuctura</groupId>
-  <artifactId>fucturaTrivia</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  	
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version>
-        <configuration>
-          <source>11</source>
-          <target>11</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-</project>
+```sql
+
+--excluir
+drop table usuario;
+
+-- cometarios
+create table usuario(
+ nome varchar(255),
+ idade int,
+ email varchar(255)
+);
+
+
+drop table questao;
+
+create table questao (
+codigo int,
+enunciado varchar(255),
+valor float
+);
+
+
+insert into questao values (1, 'Quais classes fazem parte da API JDBC?', 1.0);
+insert into questao values (2, 'Quais são as estruturas de repetição do Java?', 1.0);
+insert into questao values (3, 'Um classe pode herdar de uma interface Java?', 2.0);
+
+drop table alternativa;
+
+create table alternativa (
+codigo int,
+descricao varchar(255),
+isVerdadeira boolean,
+codigoQuestao int
+);
+
+insert into alternativa values(1, 'Connection', true, 1);
+insert into alternativa values(2, 'EntityManager', false, 1);
+
 ```
