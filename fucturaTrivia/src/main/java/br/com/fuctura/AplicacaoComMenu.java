@@ -1,59 +1,104 @@
 package br.com.fuctura;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-public class AplicacaoComMenu{
+import br.com.fuctura.dao.AlternativaDAO;
+import br.com.fuctura.dao.JogadorDAO;
+import br.com.fuctura.dao.QuestoesDAO;
+import br.com.fuctura.entidade.Jogador;
+import br.com.fuctura.entidade.Partida;
+import br.com.fuctura.entidade.Questao;
 
-	public static void main(String[] args) {
+public class AplicacaoComMenu {
 
-		Scanner scan = new Scanner(System.in);
+	public static void main(String[] args) throws NumberFormatException, IOException, SQLException {
 
-		int opçao, opcPerg = 100;
-		String pergunta = null, resposta = null;
+		Driver driver = new org.postgresql.Driver();
+		DriverManager.registerDriver(driver);
+		//Configurar com os dados da sua conexao
+		var usuario = "fuctura";
+		var senha = "123";
+		
+		Connection conexao = DriverManager.getConnection("jdbc:postgresql://localhost:5432/fuctura", usuario, senha);
+		
+		var questoesDAO = new QuestoesDAO();
+		var alternativaDAO = new AlternativaDAO();
+		var jogadorDAO = new JogadorDAO();
+		
+		var is = new InputStreamReader(System.in);
+		var brf = new BufferedReader(is);
+		var opcao = 0;
 
-		System.out.println("+#####################################+");
-		System.out.println("+#                                   #+");
-		System.out.println("+#    BEM VINDO AO TRIVIA FUCUTURA   #+");
-		System.out.println("+#                                   #+");
-		System.out.println("+# 1 - PARA ADICIONAR UMA PERGUNTA   #+");		
-		System.out.println("+# 2 - PARA ALTERAR UMA PERGUNTA     #+");
-		System.out.println("+# 3 - PARA DELETAR UMA PERGUNTA     #+");
-		System.out.println("+# 4 - PARA DLETAR UMA RESPOSTA      #+");
-		System.out.println("+# 5 - PARA ALTERAR UMA RESPOSTA     #+");
-		System.out.println("+#                                   #+");
-		System.out.println("+#####################################+");
+		do {
 
-		opçao = scan.nextInt();
-		scan.nextLine();
-
-		switch (opçao) {
-
-		case 1:
-
-			System.out.println("1- Inserir pergunta / 0- Encerrar");
-			opcPerg = scan.nextInt();
-			scan.nextLine();
-			while (opcPerg != 0) {
-
-				System.out.println("Digite a Pergunta: ");
-				pergunta = scan.nextLine();
+			System.out.println("+#####################################+");
+			System.out.println("+#                                   #+");
+			System.out.println("+#    BEM VINDO AO TRIVIA FUCUTURA   #+");
+			System.out.println("+#                                   #+");
+			System.out.println("+# 1 - Jogar   						 #+");
+			System.out.println("+# 5 - Sair     					 #+");
+			System.out.println("+#                                   #+");
+			System.out.println("+#####################################+");
 				
+			System.out.println("Digite: ");
+			
+			opcao = Integer.valueOf(brf.readLine());
+
+			//Enum?
+			if(opcao == 1) {
+				System.out.println("Digite seu nome: ");
+				var nome = brf.readLine();
 				
-
-				System.out.println("Digite a resposta 1- verdadeiro ou 0- Falso ");
-				resposta = scan.nextLine();
-
-				System.out.println("1- Inserir pergunta / 0- Encerrar");
-				opcPerg = scan.nextInt();
-
+				var jogador = new Jogador();
+				jogador.setNome(nome);
+				
+				jogadorDAO.inserir(conexao, jogador);
+				
+				//você deve implementar esssa lógica
+				var partida = new Partida();
+				
+				System.out.println("Carregando banco de dados de questões:");
+				
+				var questoes = questoesDAO.consultarTodos(conexao);
+				
+				int contadorPontos = 0;
+				
+				for (Questao questao : questoes) {
+					System.out.println("Enunciado: " + questao.getEnunciado());
+					System.out.println("Valor: " + questao.getValor());
+					
+					System.out.println("Alternativas: ");
+					
+					var alternativas = alternativaDAO.consultarPorCodigoDaQuestao(conexao, questao.getCodigo());
+					
+					var codAlternativaCorreta = 0;
+					
+					for (int i = 0; i < alternativas.size(); i++) {
+						System.out.println(i + " - " + alternativas.get(i).getDescricao());
+						
+						if(alternativas.get(i).isVerdadeira()) {
+							codAlternativaCorreta = i;
+						}
+					}
+					
+					System.out.println("Selecione 1 das alternativas: ");
+					int alternativaSelecionada = Integer.valueOf(brf.readLine());
+					
+					if(alternativaSelecionada == codAlternativaCorreta) {
+						contadorPontos++;
+					}
+					
+				}
+				
+				System.out.println(jogador.getNome() + ", parabéns! Sua pontuação foi: " + contadorPontos );
 			}
-
-			break;
-
-		}
-
-		System.out.printf(" a pergunta digitada foi :%s e a resposta correta é: %s", pergunta, resposta);
-
+			
+		} while (opcao != 5);
 	}
-
 }
