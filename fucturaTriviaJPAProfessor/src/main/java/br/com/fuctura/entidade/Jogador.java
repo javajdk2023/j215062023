@@ -7,39 +7,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+
 @Entity
 @Table(name = "TB_JOGADOR")
+@Getter
+@Setter
 public class Jogador {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int codigo;
 	
+
 	private int idade;
 	
-	@Column(nullable = false)
+	@Column(name = "nm_jog")
 	private String nome;
-
-	public int getIdade() {
-		return idade;
-	}
-
-	public void setIdade(int idade) {
-		this.idade = idade;
-	}
-
-	public int getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(int codigo) {
-		this.codigo = codigo;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
 }
