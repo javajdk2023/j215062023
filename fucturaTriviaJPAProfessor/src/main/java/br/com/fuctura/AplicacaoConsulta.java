@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 
 import com.github.javafaker.Faker;
 
+import br.com.fuctura.dto.JogadorDTO;
 import br.com.fuctura.entidade.Jogador;
 
 public class AplicacaoConsulta {
@@ -135,6 +136,37 @@ public class AplicacaoConsulta {
 			for (Jogador jogador : resultadoConsulta6) {
 				System.out.println(jogador.toString());
 			}
+		}
+		
+		
+		TypedQuery<Integer> q7 = em1
+				.createQuery("select j.idade from Jogador j"
+						+ " where j.nome like :iniciarComD", 
+						Integer.class);
+		
+		q7.setParameter("iniciarComD", "D%");
+		
+		var resultadoConsulta7 = q7.getResultList();
+	
+		for (Integer idades : resultadoConsulta7) {
+			System.out.println(idades);
+		}
+		
+		//projecao
+		TypedQuery<JogadorDTO> q8 = em1
+				.createQuery("select "
+						+ " new br.com.fuctura.dto.JogadorDTO(j.idade, j.nome) "
+						+ " from Jogador j"
+						+ " where j.nome like :iniciarComD", 
+						JogadorDTO.class);
+		
+		q8.setParameter("iniciarComD", "D%");
+		
+		var resultadoConsulta8 = q8.getResultList();
+	
+		for (JogadorDTO dto : resultadoConsulta8) {
+			System.out.println(dto.getNome());
+			System.out.println(dto.getIdade());
 		}
 	}
 	
