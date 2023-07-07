@@ -19,9 +19,14 @@ public class Jogador {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int codigo;
 	
-
 	private int idade;
 	
 	@Column(name = "nm_jog")
 	private String nome;
+
+	@Override
+	public String toString() {
+		return "Jogador [codigo=" + codigo + ", idade=" + idade + ", nome=" + nome + "]";
+	}
+	
 }

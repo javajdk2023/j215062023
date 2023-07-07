@@ -68,6 +68,8 @@ public class Aplicacao {
 		em1.getTransaction().commit();
 		
 		
+		
+		
 		//consultar
 		var query = em1.createQuery("select j from Jogador j");
 		
