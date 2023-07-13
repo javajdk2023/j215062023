@@ -1,6 +1,9 @@
 package br.com.fuctura.entidade;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +26,11 @@ public class Jogador {
 	
 	@Column(name = "nm_jog")
 	private String nome;
+	
+	private String sobreNome;
+	
+	@ElementCollection
+	private List<Integer> pontuacoes; 
 
 	@Override
 	public String toString() {

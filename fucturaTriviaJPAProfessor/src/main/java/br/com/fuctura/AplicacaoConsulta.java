@@ -10,6 +10,7 @@ import javax.persistence.TypedQuery;
 
 import com.github.javafaker.Faker;
 
+import br.com.fuctura.dto.JogadorDTO;
 import br.com.fuctura.entidade.Jogador;
 
 public class AplicacaoConsulta {
@@ -135,6 +136,17 @@ public class AplicacaoConsulta {
 			for (Jogador jogador : resultadoConsulta6) {
 				System.out.println(jogador.toString());
 			}
+		}
+		
+		
+		TypedQuery<JogadorDTO> ConsultaDTOmenorIdadeEnome = em1.createQuery
+				("select new br.com.fuctura.dto.JogadorDTO (MIN(idade) as idadeMenor, (nome) as nome) from Jogador GROUP BY nome", JogadorDTO.class);
+
+		var resultadoConsultaDTOmenorIdadeEnome = ConsultaDTOmenorIdadeEnome.getResultList();
+		
+		for (JogadorDTO dto : resultadoConsultaDTOmenorIdadeEnome) {
+			
+			System.out.println(dto.getIdade() + "\n" + dto.getNome());
 		}
 	}
 	

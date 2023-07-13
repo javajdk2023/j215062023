@@ -1,42 +1,32 @@
 package br.com.fuctura.entidade;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@Entity
+@ToString
 public class Questao {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int codigo;
 	private String enunciado;
 	private double valor;
-	private List<Alternativa> alternativas;
-
-	public int getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(int codigo) {
-		this.codigo = codigo;
-	}
-
-	public String getEnunciado() {
-		return enunciado;
-	}
-
-	public void setEnunciado(String enunciado) {
-		this.enunciado = enunciado;
-	}
-
-	public double getValor() {
-		return valor;
-	}
-
-	public void setValor(double valor) {
-		this.valor = valor;
-	}
-
-	public List<Alternativa> getAlternativas() {
-		return alternativas;
-	}
-
-	public void setAlternativas(List<Alternativa> alternativas) {
-		this.alternativas = alternativas;
-	}
+	private LocalDateTime dhCadastro;
+	
+	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	List<Alternativa> alternativas;
 }
